@@ -23,6 +23,7 @@ if csv_files:
                 with open(file, "r", encoding=enc, newline="") as infile:
                     reader = csv.reader(infile)
                     header = next(reader)
+                    rows = list(reader)  # 立即读取所有行，避免文件关闭后迭代器失效
             except StopIteration:
                 print(f"跳过空 CSV: {os.path.basename(file)}")
                 continue
@@ -32,6 +33,7 @@ if csv_files:
                     with open(file, "r", encoding=enc, newline="") as infile:
                         reader = csv.reader(infile)
                         header = next(reader)
+                        rows = list(reader)
                 except Exception as e:
                     print(f"读取 CSV 失败: {os.path.basename(file)} ({e})")
                     continue
@@ -44,7 +46,7 @@ if csv_files:
                 header_saved = True
 
             try:
-                for row in reader:
+                for row in rows:
                     writer.writerow(row)
             except Exception as e:
                 print(f"写入 CSV 行出错: {os.path.basename(file)} ({e})")
